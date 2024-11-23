@@ -1,0 +1,61 @@
+---
+title: "main"
+output: html_document
+date: "2024-11-23"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+# Instalar el paquetes
+install.packages("readr")
+install.packages("MDPIexploreR")
+
+# Cargar el paquetes
+library(readr)
+library(MDPIexploreR)
+```
+
+```{r cars}
+# Cargo funciones
+source("/workspaces/R/archivos/article_info_modificado.R")
+source("/workspaces/R/archivos/guest_editor_info_modificado_trycatch.R")
+source("/workspaces/R/archivos/clean_names.R")
+source("/workspaces/R/archivos/eliminar_tildes.R")
+source("/workspaces/R/archivos/read_html_with_retry.R")
+```
+
+```{r cars}
+# saco la información para cada artículo
+ijerph_articles<-read.csv("/workspaces/R/datos/all_ijerph_articles.csv")
+head(ijerph_articles)
+article_info_ijerph_5<-article_info_modificado(ijerph_articles, sample=5)
+#write.csv(article_info_ijerph_5, file = "/workspaces/R/datos/article_info_ijerph_5.csv", row.names = FALSE)
+```
+
+
+```{r cars}
+# Cargo SIs de IJERPH
+SIs_ijerph<-read.csv("/workspaces/R/datos/SI_ijerph_all.csv")
+
+# Saco info de los editores de los SIs
+guest_editor_1<-guest_editor_info_modificado_trycatch(SIs_ijerph,sample=1:1)
+write.csv(guest_editor_1, file = "/workspaces/R/datos/guest_editor_SI_1.csv", row.names = FALSE)
+```
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+#plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

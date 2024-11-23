@@ -6,9 +6,9 @@ guest_editor_info_modificado_trycatch <- function(journal_urls, sample_size, sle
   library(rvest)
   install.packages("dplyr")
   library(dplyr)
-  source("C:\\Users\\Marianela Parodi\\Documents\\eliminar_tildes.R")
-  source("C:\\Users\\Marianela Parodi\\Documents\\read_html_with_retry.R")
-  source("C:\\Users\\Marianela Parodi\\Documents\\clean_names.R")
+  #source("C:\\Users\\Marianela Parodi\\Documents\\eliminar_tildes.R")
+  #source("C:\\Users\\Marianela Parodi\\Documents\\read_html_with_retry.R")
+  #source("C:\\Users\\Marianela Parodi\\Documents\\clean_names.R")
   install.packages("stringr")
   library(stringr)  
   
