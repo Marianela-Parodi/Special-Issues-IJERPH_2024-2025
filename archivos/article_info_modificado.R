@@ -40,8 +40,10 @@ article_info_modificado <- function(vector,sleep=2,sample_size,show_progress=TRU
     sample_size=sample_size
   }
   
-  papers<-sample(vector,sample_size)
+  #papers<-sample(vector,sample_size)
+  papers<-vector[sample_size,1]
   
+
   if (show_progress) {
     pb <- txtProgressBar(min = 0, max = length(papers), initial = 0,style=3) #Build progress bar
   }

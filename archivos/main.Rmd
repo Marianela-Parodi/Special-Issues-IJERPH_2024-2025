@@ -37,6 +37,7 @@ source("/workspaces/R/archivos/read_html_with_retry.R")
 # saco la información para cada artículo
 ijerph_articles<-read.csv("/workspaces/R/datos/all_ijerph_articles.csv")
 head(ijerph_articles)
+#ijerph_articles[2,1]
 article_info_ijerph_5<-article_info_modificado(ijerph_articles, sample=5)
 #write.csv(article_info_ijerph_5, file = "/workspaces/R/datos/article_info_ijerph_5.csv", row.names = FALSE)
 ```
