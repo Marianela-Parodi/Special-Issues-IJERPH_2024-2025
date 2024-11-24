@@ -113,22 +113,45 @@ article_info_modificado <- function(vector,sleep=2,sample_size,show_progress=TRU
     }
     
   }
-  final_table<-paper_data%>%
-    mutate(Received=gsub("/.*","",tolower(ex_paper)), #Extract received data time and transform into date
-           Received=gsub(".*received:","",Received),
-           Received=as.Date(Received,"%d %B %Y"))%>%
-    mutate(Accepted=gsub(".*accepted:","",tolower(ex_paper)), #Extract accepted time data and transform into date
-           Accepted=gsub("/.*","",Accepted),
-           Accepted=as.Date(Accepted,"%d %B %Y"))%>%
-    mutate(tat=Accepted-Received, #Calculate turnaround times and add year of acceptance column
-           year=anio_num)%>%
-    #mutate(year=anio_num)%>%
-    mutate(issue_type=case_when(grepl("Section",ex_paper2)~"Section", #Classify articles by issue type
-                                grepl("Special Issue",ex_paper2)~"Special Issue",
-                                grepl("Topic",ex_paper2)~"Topic",
-                                .default = "No"
-    ))%>%
-    select(-ex_paper,-ex_paper2)
-  
+##  final_table<-paper_data%>%
+##    mutate(Received=gsub("/.*","",tolower(ex_paper)), #Extract received data time and transform into date
+##           Received=gsub(".*received:","",Received),
+##           Received=as.Date(Received,"%d %B %Y"))%>%
+##    mutate(Accepted=gsub(".*accepted:","",tolower(ex_paper)), #Extract accepted time data and transform into date
+##           Accepted=gsub("/.*","",Accepted),
+##           Accepted=as.Date(Accepted,"%d %B %Y"))%>%
+##    mutate(tat=Accepted-Received, #Calculate turnaround times and add year of acceptance column
+##           year=anio_num)%>%
+##    #mutate(year=anio_num)%>%
+##    mutate(issue_type=case_when(grepl("Section",ex_paper2)~"Section", #Classify articles by issue type
+##                                grepl("Special Issue",ex_paper2)~"Special Issue",
+##                                grepl("Topic",ex_paper2)~"Topic",
+##                                .default = "No"
+##    ))%>%
+##    select(-ex_paper,-ex_paper2)
+
+final_table <- paper_data %>%
+  distinct() %>%  # Eliminar filas duplicadas de antemano
+  mutate(
+    Received = gsub("/.*", "", tolower(ex_paper)),  # Extraer la fecha de recepción
+    Received = gsub(".*received:", "", Received),
+    Received = as.Date(Received, "%d %B %Y"),
+    
+    Accepted = gsub(".*accepted:", "", tolower(ex_paper)),  # Extraer la fecha de aceptación
+    Accepted = gsub("/.*", "", Accepted),
+    Accepted = as.Date(Accepted, "%d %B %Y"),
+    
+    tat = Accepted - Received,  # Calcular el tiempo de respuesta
+    year = anio_num,  # Añadir el año de aceptación
+    
+    issue_type = case_when(
+      grepl("Section", ex_paper2) ~ "Section", 
+      grepl("Special Issue", ex_paper2) ~ "Special Issue", 
+      grepl("Topic", ex_paper2) ~ "Topic", 
+      TRUE ~ "No"
+    )
+  ) %>%
+  select(-ex_paper, -ex_paper2) 
+    
   final_table
 }
