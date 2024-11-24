@@ -130,8 +130,11 @@ article_info_modificado <- function(vector,sleep=2,sample_size,show_progress=TRU
 ##    ))%>%
 ##    select(-ex_paper,-ex_paper2)
 
+paper_data <- paper_data %>% distinct()
 final_table <- paper_data %>%
   distinct() %>%  # Eliminar filas duplicadas de antemano
+  group_by(i) %>%  # Agrupar por artículo, si tienes un identificador único
+
   mutate(
     Received = gsub("/.*", "", tolower(ex_paper)),  # Extraer la fecha de recepción
     Received = gsub(".*received:", "", Received),
@@ -151,7 +154,9 @@ final_table <- paper_data %>%
       TRUE ~ "No"
     )
   ) %>%
+  ungroup() %>%  # Desagrupar después de las transformaciones
   select(-ex_paper, -ex_paper2) 
-    
+  head(paper_data)  
+  final_table %>% group_by(i) %>% summarise(count = n()) 
   final_table
 }
