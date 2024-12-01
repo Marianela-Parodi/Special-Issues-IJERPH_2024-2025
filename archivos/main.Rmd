@@ -18,16 +18,24 @@ When you click the **Knit** button a document will be generated that includes bo
 # Instalar el paquetes
 install.packages("readr")
 install.packages("MDPIexploreR")
+install.packages("tidyr")
 
 # Cargar el paquetes
 library(readr)
 library(MDPIexploreR)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(stringr)
 ```
 
 ```{r cars}
 # Cargo funciones
 source("/workspaces/R/archivos/article_info_modificado.R")
+source("/workspaces/R/archivos/article_info_modificado_fegg.R")
 source("/workspaces/R/archivos/guest_editor_info_modificado_trycatch.R")
+source("/workspaces/R/archivos/guest_editor_info.R")
+source("/workspaces/R/archivos/guest_editor_info_nuevo.R")
 source("/workspaces/R/archivos/clean_names.R")
 source("/workspaces/R/archivos/eliminar_tildes.R")
 source("/workspaces/R/archivos/read_html_with_retry.R")
@@ -38,9 +46,17 @@ source("/workspaces/R/archivos/read_html_with_retry.R")
 ijerph_articles<-read.csv("/workspaces/R/datos/all_ijerph_articles.csv")
 head(ijerph_articles)
 #ijerph_articles[2,1]
-article_info_ijerph_5<-article_info_modificado(ijerph_articles, sample=1:2)
+article_info_ijerph_5<-article_info_modificado(ijerph_articles, sample=1:3)
 article_info_ijerph_5
 #write.csv(article_info_ijerph_5, file = "/workspaces/R/datos/article_info_ijerph_5.csv", row.names = FALSE)
+```
+
+```{r cars}
+## Para correr ainfo de articulos!!
+# saco la información para cada artículo
+ijerph_articles<-read.csv("/workspaces/R/datos/all_ijerph_articles.csv")
+article_info_ijerph_45000_54999<-article_info_modificado(ijerph_articles, sample=45000:54999) 
+write.csv(article_info_ijerph_45000_54999, file = "/workspaces/R/datos/article_info_ijerph_45000_54999.csv", row.names = FALSE)
 ```
 
 
@@ -49,15 +65,17 @@ article_info_ijerph_5
 SIs_ijerph<-read.csv("/workspaces/R/datos/SI_ijerph_all.csv")
 
 # Saco info de los editores de los SIs
-guest_editor_1<-guest_editor_info_modificado_trycatch(SIs_ijerph,sample=1:1)
-write.csv(guest_editor_1, file = "/workspaces/R/datos/guest_editor_SI_1.csv", row.names = FALSE)
+
+guest_editor_0001_0599<-guest_editor_info_nuevo(SIs_ijerph,sample=1:599)
+write.csv(guest_editor_0001_0599, file = "/workspaces/R/datos/guest_editor_SI_0001_0599.csv", row.names = FALSE)
+
 ```
 ## Including Plots
 
 You can also embed plots, for example:
 
 ```{r pressure, echo=FALSE}
-head(paper_data)
+rlang::last_trace()
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

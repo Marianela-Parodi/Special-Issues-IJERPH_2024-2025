@@ -61,13 +61,19 @@ article_info_modificado <- function(vector,sleep=2,sample_size,show_progress=TRU
         html_nodes(".pubhistory span") %>%
         html_text2()
       fecha_publicacion <- ex_paper[grepl("Published:", ex_paper)]
+      fecha_recepcion <- ex_paper[grepl("submission recived:", ex_paper)]
+      fecha_aceptacion <- ex_paper[grepl("Accepted:", ex_paper)]
       fecha_date <- dmy(fecha_publicacion)  # Día-Mes-Año
       anio_num <- as.numeric(format(fecha_date, "%Y"))
       
       ex_paper2<-paper%>% #obtain type of issue
         html_nodes(".belongsTo")%>%
         html_text2()
-      
+
+      test<-paper%>% #obtain type of issue
+        html_nodes(".belongsTo")%>%
+        html_text2()
+
       if (identical( ex_paper,character(0))) {
         ex_paper<-"no"
       } else {
@@ -102,7 +108,12 @@ article_info_modificado <- function(vector,sleep=2,sample_size,show_progress=TRU
       
     })
     
-    temp_df<-data.frame(i,ex_paper,ex_paper2,article_type)
+    fila<-matrix(ex_paper, ncol = 3)
+    if(length(fila) >= 3 && all(fila[1:3] == fila[1])) {
+  # Poner NA en los dos primeros elementos si son iguales
+  fila[1:2] <- NA
+}
+    temp_df<-data.frame(i,received=fila[1], accepted=fila[2], publication=fila[3],article_type)
     paper_data<-bind_rows(paper_data,temp_df)
     
     count<-count+1
@@ -113,50 +124,44 @@ article_info_modificado <- function(vector,sleep=2,sample_size,show_progress=TRU
     }
     
   }
-##  final_table<-paper_data%>%
-##    mutate(Received=gsub("/.*","",tolower(ex_paper)), #Extract received data time and transform into date
-##           Received=gsub(".*received:","",Received),
-##           Received=as.Date(Received,"%d %B %Y"))%>%
-##    mutate(Accepted=gsub(".*accepted:","",tolower(ex_paper)), #Extract accepted time data and transform into date
-##           Accepted=gsub("/.*","",Accepted),
-##           Accepted=as.Date(Accepted,"%d %B %Y"))%>%
-##    mutate(tat=Accepted-Received, #Calculate turnaround times and add year of acceptance column
-##           year=anio_num)%>%
-##    #mutate(year=anio_num)%>%
-##    mutate(issue_type=case_when(grepl("Section",ex_paper2)~"Section", #Classify articles by issue type
-##                                grepl("Special Issue",ex_paper2)~"Special Issue",
-##                                grepl("Topic",ex_paper2)~"Topic",
-##                                .default = "No"
-##    ))%>%
-##    select(-ex_paper,-ex_paper2)
+  ex_paper
+  final_table<-paper_data%>%
+    #mutate(Received=gsub("/.*","",tolower(ex_paper)), #Extract received data time and transform into date
+           #Received=gsub(".*received:","",Received),
+           #Received=as.Date(Received,"%d %B %Y"))%>%
+    #mutate(Accepted=gsub(".*accepted:","",tolower(ex_paper)), #Extract accepted time data and transform into date
+    #       Accepted=gsub("/.*","",Accepted),
+     #      Accepted=as.Date(Accepted,"%d %B %Y"))%>%
+    mutate(
+      #tat=Accepted-Received, #Calculate turnaround times and add year of acceptance column
+           year=anio_num)%>%
+    #mutate(year=anio_num)%>%
+    mutate(issue_type=case_when(grepl("Section",ex_paper2)~"Section", #Classify articles by issue type
+                                grepl("Special Issue",ex_paper2)~"Special Issue",
+                                grepl("Topic",ex_paper2)~"Topic",
+                                .default = "No"
+    ))%>%
 
-paper_data <- paper_data %>% distinct()
-final_table <- paper_data %>%
-  distinct() %>%  # Eliminar filas duplicadas de antemano
-  group_by(i) %>%  # Agrupar por artículo, si tienes un identificador único
 
-  mutate(
-    Received = gsub("/.*", "", tolower(ex_paper)),  # Extraer la fecha de recepción
-    Received = gsub(".*received:", "", Received),
-    Received = as.Date(Received, "%d %B %Y"),
-    
-    Accepted = gsub(".*accepted:", "", tolower(ex_paper)),  # Extraer la fecha de aceptación
-    Accepted = gsub("/.*", "", Accepted),
-    Accepted = as.Date(Accepted, "%d %B %Y"),
-    
-    tat = Accepted - Received,  # Calcular el tiempo de respuesta
-    year = anio_num,  # Añadir el año de aceptación
-    
-    issue_type = case_when(
-      grepl("Section", ex_paper2) ~ "Section", 
-      grepl("Special Issue", ex_paper2) ~ "Special Issue", 
-      grepl("Topic", ex_paper2) ~ "Topic", 
-      TRUE ~ "No"
-    )
-  ) %>%
-  ungroup() %>%  # Desagrupar después de las transformaciones
-  select(-ex_paper, -ex_paper2) 
-  head(paper_data)  
-  final_table %>% group_by(i) %>% summarise(count = n()) 
-  final_table
+# Ver el resultado
+print()
+
+
+
+
+
+
+
+
+
+
+
+
+
+    #select(-ex_paper,-ex_paper2)
+
+
+
+final_table
+
 }
