@@ -55,8 +55,8 @@ article_info_ijerph_5
 ## Para correr ainfo de articulos!!
 # saco la información para cada artículo
 ijerph_articles<-read.csv("/workspaces/R/datos/all_ijerph_articles.csv")
-article_info_ijerph_35000_39999<-article_info_modificado(ijerph_articles, sample=35000:39999) 
-write.csv(article_info_ijerph_35000_39999, file = "/workspaces/R/datos/article_info_ijerph_35000_39999.csv", row.names = FALSE)
+article_info_ijerph_25000_29999<-article_info_modificado(ijerph_articles, sample=25000:29999) 
+write.csv(article_info_ijerph_25000_29999, file = "/workspaces/R/datos/article_info_ijerph_25000_29999.csv", row.names = FALSE)
 ```
 
 
