@@ -1,0 +1,61 @@
+---
+title: "main"
+output: html_document
+date: "2024-11-23"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r cars}
+# Instalar los paquetes
+install.packages("readr")
+install.packages("MDPIexploreR")
+install.packages("tidyr")
+
+# Cargar los paquetes
+library(readr)
+library(MDPIexploreR)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(stringr)
+```
+
+```{r cars}
+# Cargar las funciones
+source("/workspaces/R/archivos/guest_editor_info_nuevo.R")
+source("/workspaces/R/archivos/clean_names.R")
+source("/workspaces/R/archivos/eliminar_tildes.R")
+source("/workspaces/R/archivos/read_html_with_retry.R")
+source("/workspaces/R/archivos/special_issue_find.R")
+```
+
+```{r cars}
+# Descargo los SIs de IJERPH desde https://www.mdpi.com/journal/ijerph/special_issues
+si<-special_issue_find("ijerph",type="closed")
+write.csv(si, file = "/workspaces/R/datos/SI_ijerph_all_2025.csv", row.names = FALSE)
+```
+
+```{r cars}
+# Cargo SIs de IJERPH
+SIs_ijerph<-read.csv("/workspaces/R/datos/SI_ijerph_all.csv")
+head(SIs_ijerph)
+```
+```{r cars}
+# Saco info de los editores de los SIs
+
+# Bucle FOR para sacar la info por paquetes 
+# Configura el número máximo de artículos por archivo (consume tiempo, por eso se recomienda hacerlo por paquetes)
+max_por_archivo <- 500
+
+# Recorre los elementos de SIs_ijerph y guarda la info en los distintos paquetes de longitud elegida
+for (i in seq(1, dim(SIs_ijerph)[1], by = max_por_archivo)) {
+  df<-guest_editor_info_nuevo(SIs_ijerph,sample=i:min(i + max_por_archivo - 1, dim(SIs_ijerph)[1]))
+  filename <- paste0("/workspaces/R/datos/SI_guest_editor_info_", i, "to", min(i + max_por_archivo - 1, dim(SIs_ijerph)[1]), ".csv")
+  write.csv(df, file = filename, row.names = FALSE)
+  }
+
+# NOTA: Los archivos que están aquí guardados no se corresponden con este FOR, ya que por cuestiones de límites de procesamiento de mi cuenta de GitHub no lo pude correr de manera continua.
+```

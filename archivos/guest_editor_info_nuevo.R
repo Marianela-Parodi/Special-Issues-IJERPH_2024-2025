@@ -1,3 +1,14 @@
+# ---------------Versión modificada de guest_editor_info.R del paquete MDPIExploreR, Nov. 2024---------------
+# --------------------------------------------------------------------------------------------------------------------------------------
+# 
+# Objetivo: recuperar información de cada uno de los artículos de SIs listados en "https://www.mdpi.com/journal/ijerph/special_issues"
+# Principal modificación: 
+# - Se incluye en la información extraída los nombres de los editores (no incluidos en la versión original)
+# - Se incluye la fecha de deadline del SI (no incluida en la versión original)
+# Agregados necesarios para la modificación: 
+# - Se utiliza la función "eliminar_tildes.R" para poder gestionar de manera más eficaz los nombres de los editores
+# --------------------------------------------------------------------------------------------------------------------------------------
+
 #' Obtain information from guest edited special issues
 #'
 #'@description#' 
