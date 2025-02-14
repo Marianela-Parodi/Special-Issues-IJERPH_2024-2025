@@ -50,10 +50,14 @@ Además, se incluyen funciones auxiliares para mejorar el procesamiento de los d
 ## Contacto
 
 Marianela Parodi
+
 parodi.marianela@gmail.com
 
+
 https://www.linkedin.com/in/marianela-parodi-734657a7/
+
 https://scholar.google.com/citations?hl=es&user=3eyZMLwAAAAJ
+
 https://orcid.org/0000-0002-9099-0954
 
 ## Referencias
